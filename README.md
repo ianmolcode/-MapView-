@@ -116,6 +116,4 @@ The App is under-development phase. Will Imporve with timw.
 
 
 ## Screenshots
-
-![App Screenshot](https://drive.google.com/file/d/1BC0WQQUWSTB17Wn3Pd_Bk8d-MEG0tio9/view?usp=sharing)
-
+https://drive.google.com/file/d/1BIFYX23wuQUKfmRuV-a5etUcziVEYfcv/view?usp=sharing
