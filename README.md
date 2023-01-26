@@ -116,4 +116,5 @@ The App is under-development phase. Will Imporve with timw.
 
 
 ## Screenshots
-https://drive.google.com/file/d/1BIFYX23wuQUKfmRuV-a5etUcziVEYfcv/view?usp=sharing
+![Screenshot_2023-01-27-04-34-44-810_host exp exponent](https://user-images.githubusercontent.com/76910737/214976697-d772645a-b50b-4e23-9df7-3b0c2ef84bb1.jpg)
+
