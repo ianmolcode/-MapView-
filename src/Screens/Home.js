@@ -24,7 +24,184 @@ import { GOOGLE_MAP_KEY } from './Constant/googlemapapi';
 import MapViewDirections from 'react-native-maps-directions';
 import ImagePath from '../Screens/Constant/ImagePath.js';
 import { TouchableOpacity  } from 'react-native-gesture-handler';
+import AddressPickup from './Components/AddressPickup';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { useTheme } from 'react-navigation';
 
+
+// nigtView json made using https://mapstyle.withgoogle.com/
+const nightView = [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#263c3f"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#6b9a76"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#38414e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#212a37"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9ca5b3"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#1f2835"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#f3d19c"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2f3948"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#515c6d"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  }
+]
+  
+const mapStandardStyle = [
+{
+  "elementType": "geometry",
+  "stylers": [
+    {
+      visibility: "off"
+    }
+  ]
+},
+]
 
 export default function Home({navigation}) {
   const[state, setState]= useState({
@@ -47,12 +224,17 @@ export default function Home({navigation}) {
     navigation.navigate('chooseLocation');
   }
   
+  const theme = useTheme();
   return (
+   
     <View style={styles.container}>
+
     <View style ={{flex:1}}>
       <MapView
        ref= {mapRef}
        style={styles.map}
+       //to enable the night mode, please uncomment the following linee
+    //   customMapStyle={nightView}
       initialRegion={pickupCoordinates} >
       <Marker coordinate={pickupCoordinates} 
       //  image = {ImagePath.CurLoc}
@@ -61,6 +243,7 @@ export default function Home({navigation}) {
       <Marker coordinate={dropoffCoordinates} 
       //  image= {ImagePath.GreenMarker}
       />
+      
     <MapViewDirections
     origin={pickupCoordinates}
     destination={dropoffCoordinates}
@@ -81,12 +264,28 @@ export default function Home({navigation}) {
     }}
     />
     </MapView>
+    <View style={styles.searchbar}>
+    <GooglePlacesAutocomplete
+    styles={{textInput:styles.input}}
+    placeholder='Search'
+    onPress={(data, details = null) => {
+      // 'details' is provided when fetchDetails = true
+      console.log(data, details);
+    }}
+    query={{
+      key: {GOOGLE_MAP_KEY},
+      language: 'en',
+    }}
+  />
+  </View>
+  
     </View>
+   
     <View style= {styles.bottomCard}><Text>Where are you going?</Text>
 
     <TouchableNativeFeedback onPress = {onPressLocation} >
     <View style= {styles.bottum}>
-    <Text>Choose Location Buddy</Text>
+    <Text>Choose Location📌</Text>
     </View>
     </TouchableNativeFeedback>
     </View>
@@ -120,5 +319,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 16,
     alignItems: 'center',
- }
+ },
+  searchbar:{
+    backgroundColor: 'white',
+    width: '90%',
+    padding: 3,
+    position: 'absolute',
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 3,
+    borderRadius: 5,
+    top: 60,
+    marginLeft: 20,
+
+  },
+  input:{
+    borderColor: 'black',
+    borderWidth: 1,
+  },
 });
