@@ -3,6 +3,7 @@
 
 A react native application implementing Google Maps.
 
+![expo-go](https://user-images.githubusercontent.com/76910737/214979777-a2649f3e-239b-46a5-926d-676273ac34d5.svg)
 
 
 
